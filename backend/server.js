@@ -19,8 +19,16 @@ import { notFound, errorHandler } from "./middleware/errorHandler.js";
 
 const app = express();
 
-// Database connect call for serverless environment
-connectDB();
+// Database connection middleware for Serverless
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (error) {
+    console.error("DB Connection Error:", error);
+    res.status(500).json({ error: "Database connection failed" });
+  }
+});
 
 // --- Performance & security middleware ---
 app.use(
@@ -48,7 +56,7 @@ app.use(
   })
 );
 
-// Root route (404 fix karne ke liye)
+// Root route
 app.get("/", (req, res) => {
   res.send("Backend is running successfully!");
 });
