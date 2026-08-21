@@ -47,18 +47,9 @@ app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(mongoSanitize());
 
-// Static uploads directory
-app.use(
-  "/uploads",
-  express.static(path.join(__dirname, "uploads"), {
-    maxAge: "30d",
-    immutable: true,
-  })
-);
-
 // Root route
 app.get("/", (req, res) => {
-  res.send("Backend is running successfully!");
+  res.status(200).json({ message: "Backend is running!" });
 });
 
 // Health check route
